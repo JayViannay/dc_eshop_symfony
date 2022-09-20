@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %} {% block title %} - Accueil{% endblock %} {%
+block body %}
+<section id="home" class="container">
+	<div class="row">
+        {% for ref in references %}
+		<div class="col-md-4 col-sm-12">
+			<div class="card" style="width: 18rem">
+				<img src="{{ ref.image }}" class="card-img-top" alt="{{ref.title}}" />
+				<div class="card-body">
+					<h5 class="card-title">{{ ref.title }}</h5>
+					<p class="card-text">
+						{{ ref.description }}
+					</p>
+                    <p>{{ref.price.amount}} $</p>
+					<a href="{{ path('app_shop_show', {'slug' : ref.slug })}}" class="btn btn-primary">Voir plus</a>
+				</div>
+			</div>
+		</div>
+        {% endfor %}
+	</div>
+</section>
+{% endblock %}
