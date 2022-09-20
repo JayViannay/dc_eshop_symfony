@@ -5,11 +5,11 @@ block body %}
         {% for ref in references %}
 		<div class="col-md-4 col-sm-12">
 			<div class="card" style="width: 18rem">
-				<img src="{{ ref.image }}" class="card-img-top" alt="{{ref.title}}" />
+				<img src="{{ ref.image }}" class="card-img-top" alt="{{ref.title}}" height="300px"/>
 				<div class="card-body">
 					<h5 class="card-title">{{ ref.title }}</h5>
 					<p class="card-text">
-						{{ ref.description }}
+						{{ ref.description|length > 50 ? ref.description|slice(0, 50) ~ '...' : ref.description}}
 					</p>
                     <p>{{ref.price.amount}} $</p>
 					<a href="{{ path('app_shop_show', {'slug' : ref.slug })}}" class="btn btn-primary">Voir plus</a>
