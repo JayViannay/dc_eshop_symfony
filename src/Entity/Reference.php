@@ -35,6 +35,10 @@ class Reference
     #[ORM\OneToMany(mappedBy: 'ref', targetEntity: Article::class)]
     private Collection $articles;
 
+    private $colors;
+
+    private $sizes;
+
     public function __construct()
     {
         $this->articles = new ArrayCollection();
@@ -133,5 +137,29 @@ class Reference
         }
 
         return $this;
+    }
+
+    public function getColors(): ?array
+    {
+        $colors = [];
+        $articles = $this->getArticles();
+        foreach ($articles as $article) {
+            if (!in_array($article->getColor(), $colors)) {
+                $colors[] = $article->getColor();
+            }
+        }
+        return $colors;
+    }
+
+    public function getSizes(): ?array
+    {
+        $sizes = [];
+        $articles = $this->getArticles();
+        foreach ($articles as $article) {
+            if (!in_array($article->getSize(), $sizes)) {
+                $sizes[] = $article->getSize();
+            }
+        }
+        return $sizes;
     }
 }
