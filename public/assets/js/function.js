@@ -12,7 +12,7 @@ const handleAddToCart = (ref_id) => {
                 select.id = "js-select-color"
                 
                 const defaultOpt = document.createElement('option');
-                defaultOpt.innerHTML = 'Selectionner ue couleur';
+                defaultOpt.innerHTML = 'Selectionner une couleur';
                 
                 select.appendChild(defaultOpt);
                 divColors.appendChild(select);

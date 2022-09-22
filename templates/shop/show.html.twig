@@ -17,7 +17,8 @@
                                 </ul>
                             {% endfor %}
 
-                        <form>
+                        <form action="{{ path('app_cart_add')}}">
+                            <input type="hidden" name="ref_id" value="{{reference.id}}">
                             <select name="size" id="js-select-size" class="form-select my-3">
                                 <option>Choisissez votre taille</option>
                                 {% for size in reference.sizes %}
@@ -30,7 +31,7 @@
                                 <label for="qty" class="form-label">Quantité souhaitée</label>
                                 <input type="number" name="qty" class="form-control" id="qty" value="1">
                             </div>
-                            <button type="button" id="js-add-to-cart" class="btn btn-sm btn-dark d-none">Add to cart</button>
+                            <button type="submit" id="js-add-to-cart" class="btn btn-sm btn-dark d-none">Add to cart</button>
                         </form>
                        
                         <p>{{reference.price.amount}} $</p>

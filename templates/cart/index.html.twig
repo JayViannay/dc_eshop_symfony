@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} - Cart{% endblock %}
+
+{% block body %}
+<section class="container" id="cart_ticket">
+    <div class="jumbotron mt-3">
+        <h1 class="display-6 mb-3">Cart :</h1>
+        {% if articles | length > 0 %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Référence</th>
+                    <th>Image</th>
+                    <th>Taille</th>
+                    <th>Couleur</th>
+                    <th>Prix</th>
+                    <th>Quantité</th>
+                    <th>Total</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in articles %}
+                <tr>
+                    <td><a href="{{ path('app_shop_show', { 'slug': item.article.ref.slug }) }}">{{ item.article.ref.title }}</a></td>
+                    <td><img src="{{ item.article.ref.image }}" alt="lorem ipsum" width="64px" height="64px"></td>
+                    <td>{{ item.article.size.name }}</td>
+                    <td>{{ item.article.color.name }}</td>
+                    <td>{{ item.article.ref.price.amount }} $</td>
+                    <td>{{ item.qty }}</td>
+                    <td>{{ item.article.ref.price.amount * item.qty }} €</td>
+                    <td><a href="{{ path('app_cart_remove', { 'id': item.article.id })}}" class="btn btn-warning btn-sm"><i class="fa-solid fa-trash"></i> Supprimer</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="6" class="text-right">Total : </td>
+                    <td colspan="1">{{ total }} €</td>
+                    {# <td colspan="1">{{ form(orderForm) }}</td> #}
+                </tr>
+            </tfoot>
+        </table>
+        <div class="text-end"></div>
+        {% else %}
+        <div class="alert alert-dark" role="alert">
+            Cart is empty
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}
