@@ -30,6 +30,7 @@ class UserOrder
 
     public function __construct()
     {
+        $this->createdAt = new \DateTimeImmutable();
         $this->details = new ArrayCollection();
     }
 

@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Form\OrderType;
 use App\Repository\ArticleRepository;
 use App\Repository\ReferenceRepository;
 use App\Service\CartService;
@@ -13,11 +14,31 @@ use Symfony\Component\Routing\Annotation\Route;
 class CartController extends AbstractController
 {
     #[Route('/cart', name: 'app_cart')]
-    public function index(CartService $cartService): Response
+    public function index(Request $request, CartService $cartService): Response
     {
+
+        $orderForm = $this->createForm(OrderType::class);
+        $orderForm->handleRequest($request);
+
+        if ($orderForm->isSubmitted() && $orderForm->isValid()) {
+            if (!$this->getUser()) return $this->redirectToRoute('app_login');
+            if ($this->getUser()->getAddresses()->isEmpty()) return $this->redirectToRoute('app_profile_address_add');
+            // user has an address & name + firstname
+
+            // si tout est ok 
+            // créer une nouvelle commande
+            // cartService->getItems() => articles
+            // pour chacun des articles dans le panier je créer un ticket
+            // puis je redirige user ailleurs commande validé
+            
+            
+            dd('action payer');
+        }
+
         return $this->render('cart/index.html.twig', [
             'articles' => $cartService->getItems(),
             'total' => $cartService->getTotal(),
+            'orderForm' => $orderForm->createView()
         ]);
     }
 
