@@ -1,0 +1,69 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} Profil{% endblock %}
+
+{% block body %}
+<section id="list-addresses" class="container">
+
+    <h1 class="display-6 mb-3">Adresses :</h1>
+    <div class="text-end">
+        <button type="button" class="btn btn-sm btn-dark" data-bs-toggle="modal" data-bs-target="#form-new-address">
+            <i class="fa fa-plus"></i>&nbsp;ajouter une adresse
+        </button>
+    </div>
+    {% if app.user.addresses | length > 0 %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Rue</th>
+                <th>Code Postal</th>
+                <th>Ville</th>
+                <th>Pays</th>
+                <th class="text-center">Adresse Principale</th>
+                <th>Supprimer</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for address in app.user.addresses %}
+            <tr>
+                <td>{{ address.name }}</td>
+                <td>{{ address.street }}</td>
+                <td>{{ address.zipcode }}</td>
+                <td>{{ address.city }}</td>
+                <td>{{ address.country }}</td>
+                <td class="text-center">
+                    select as main address
+                </td>
+                <td class="text-center">
+                    delete address
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <div class="alert alert-dark" role="alert">
+        Vous n'avez pas encore de enregistré d'adresse.
+    </div>
+    {% endif %}
+</section>
+
+<div class="modal fade" id="form-new-address" tabindex="-1" aria-labelledby="form-new-address-abel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="form-new-address-abel">Ajouter une nouvelle addresse</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                addresse form
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

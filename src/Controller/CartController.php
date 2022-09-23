@@ -23,17 +23,22 @@ class CartController extends AbstractController
         CartService $cartService,
         UserOrderRepository $userOrderRepository,
         TicketRepository $ticketRepository,
-        ): Response
-    {
-
+        ArticleRepository $articleRepository
+    ): Response {
         $orderForm = $this->createForm(OrderType::class);
         $orderForm->handleRequest($request);
 
         if ($orderForm->isSubmitted() && $orderForm->isValid()) {
-            if (!$this->getUser()) return $this->redirectToRoute('app_login');
-            if (!$this->getUser()->getFirstname() || !$this->getUser()->getLastname()) return $this->redirectToRoute('app_profile_update');
-            if (!$this->getUser()->getMainAddress()) return $this->redirectToRoute('app_profile_address_add');
-          
+            if (!$this->getUser()) {
+                return $this->redirectToRoute('app_login');
+            }
+            if (!$this->getUser()->getFirstname() || !$this->getUser()->getLastname()) {
+                return $this->redirectToRoute('app_profile_update');
+            }
+            if (!$this->getUser()->getMainAddress()) {
+                return $this->redirectToRoute('app_profile_address_add');
+            }
+
             $order = new UserOrder();
             $order->setUser($this->getUser());
             $order->setTotal($cartService->getTotal());
@@ -46,7 +51,11 @@ class CartController extends AbstractController
                 ->setArticle($item['article'])
                 ->setQty($item['qty']);
                 $ticketRepository->add($detail, true);
+
+                $item['article']->setQty($item['article']->getQty() - $item['qty']);
+                $articleRepository->add($item['article'], true);
             }
+
             $cartService->cleanCart();
             $this->addFlash('success', 'Votre commande a bien été enregistrée !');
             return $this->redirectToRoute('app_profile_orders');
@@ -64,7 +73,8 @@ class CartController extends AbstractController
         Request $request,
         ArticleRepository $articleRepository,
         CartService $cartService,
-        ReferenceRepository $referenceRepository): Response
+        ReferenceRepository $referenceRepository
+    ): Response
     {
         $ref = $request->get('ref_id');
         $color = $request->get('color');

@@ -12,9 +12,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+#[Route('/profile')]
 class ProfileController extends AbstractController
 {
-    #[Route('/profile', name: 'app_profile')]
+    #[Route('/', name: 'app_profile')]
     public function index(): Response
     {
         return $this->render('profile/index.html.twig', [
@@ -22,12 +23,16 @@ class ProfileController extends AbstractController
         ]);
     }
 
-    #[Route('/profile/orders', name: 'app_profile_orders')]
+    #[Route('/orders', name: 'app_profile_orders')]
     public function orders(): Response
     {
-        return $this->render('profile/orders.html.twig', [
-            'controller_name' => 'ProfileController',
-        ]);
+        return $this->render('profile/orders.html.twig');
+    }
+
+    #[Route('/addresses', name: 'app_profile_addresses')]
+    public function assresses(): Response
+    {
+        return $this->render('profile/addresses.html.twig');
     }
 
     #[Route('/profile/orders/{id}/details', name: 'app_profile_order_show')]
@@ -38,7 +43,7 @@ class ProfileController extends AbstractController
         ]);
     }
 
-    #[Route('/profile/update', name: 'app_profile_update')]
+    #[Route('/update', name: 'app_profile_update')]
     public function profileUpdate(Request $request, UserRepository $userRepository): Response
     {
         $user = $this->getUser();
@@ -56,7 +61,7 @@ class ProfileController extends AbstractController
         ]);
     }
 
-    #[Route('/profile/address/add', name: 'app_profile_address_add')]
+    #[Route('/address/add', name: 'app_profile_address_add')]
     public function addAddress(
         Request $request,
         AddressRepository $addressRepository,

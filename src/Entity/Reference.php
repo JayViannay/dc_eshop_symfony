@@ -144,8 +144,10 @@ class Reference
         $colors = [];
         $articles = $this->getArticles();
         foreach ($articles as $article) {
-            if (!in_array($article->getColor(), $colors)) {
-                $colors[] = $article->getColor();
+            if ($article->getQty() > 0) {
+                if (!in_array($article->getColor(), $colors)) {
+                    $colors[] = $article->getColor();
+                }
             }
         }
         return $colors;
@@ -156,8 +158,10 @@ class Reference
         $sizes = [];
         $articles = $this->getArticles();
         foreach ($articles as $article) {
-            if (!in_array($article->getSize(), $sizes)) {
-                $sizes[] = $article->getSize();
+            if ($article->getQty() > 0) {
+                if (!in_array($article->getSize(), $sizes)) {
+                    $sizes[] = $article->getSize();
+                }
             }
         }
         return $sizes;

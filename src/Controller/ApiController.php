@@ -29,4 +29,16 @@ class ApiController extends AbstractController
         
         return $response;
     }
+
+    #[Route('/reference/article-qty', name: 'api_ref_article_qty')]
+    public function getArticleQty(Request $request, ArticleRepository $articleRepository): Response
+    {
+        $data = json_decode($request->getContent(), true);
+        $article = $articleRepository->findOneByParams($data['ref_id'], $data['size_id'], $data['color_id']);
+
+        $response = new Response(json_encode(array('article_qty' => $article->getQty())));
+        $response->headers->set('Content-Type', 'application/json');
+        
+        return $response;
+    }
 }

@@ -16,7 +16,7 @@
                                     <li>{{color.name}}</li>
                                 </ul>
                             {% endfor %}
-
+                        <p id="display-stock" class="text-danger"></p>
                         <form action="{{ path('app_cart_add')}}">
                             <input type="hidden" name="ref_id" value="{{reference.id}}">
                             <select name="size" id="js-select-size" class="form-select my-3">
@@ -33,7 +33,8 @@
                             </div>
                             <button type="submit" id="js-add-to-cart" class="btn btn-sm btn-dark d-none">Add to cart</button>
                         </form>
-                       
+                        
+                        
                         <p>{{reference.price.amount}} $</p>
                         <a href="#" class="btn btn-primary">Go somewhere</a>
                     </div>
