@@ -2,9 +2,13 @@
 
 namespace App\Controller;
 
+use App\Entity\Ticket;
+use App\Entity\UserOrder;
 use App\Form\OrderType;
 use App\Repository\ArticleRepository;
 use App\Repository\ReferenceRepository;
+use App\Repository\TicketRepository;
+use App\Repository\UserOrderRepository;
 use App\Service\CartService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,7 +18,12 @@ use Symfony\Component\Routing\Annotation\Route;
 class CartController extends AbstractController
 {
     #[Route('/cart', name: 'app_cart')]
-    public function index(Request $request, CartService $cartService): Response
+    public function index(
+        Request $request,
+        CartService $cartService,
+        UserOrderRepository $userOrderRepository,
+        TicketRepository $ticketRepository,
+        ): Response
     {
 
         $orderForm = $this->createForm(OrderType::class);
@@ -22,17 +31,25 @@ class CartController extends AbstractController
 
         if ($orderForm->isSubmitted() && $orderForm->isValid()) {
             if (!$this->getUser()) return $this->redirectToRoute('app_login');
-            if ($this->getUser()->getAddresses()->isEmpty()) return $this->redirectToRoute('app_profile_address_add');
-            // user has an address & name + firstname
+            if (!$this->getUser()->getFirstname() || !$this->getUser()->getLastname()) return $this->redirectToRoute('app_profile_update');
+            if (!$this->getUser()->getMainAddress()) return $this->redirectToRoute('app_profile_address_add');
+          
+            $order = new UserOrder();
+            $order->setUser($this->getUser());
+            $order->setTotal($cartService->getTotal());
+            $userOrderRepository->add($order, true);
 
-            // si tout est ok 
-            // créer une nouvelle commande
-            // cartService->getItems() => articles
-            // pour chacun des articles dans le panier je créer un ticket
-            // puis je redirige user ailleurs commande validé
-            
-            
-            dd('action payer');
+            $items = $cartService->getItems();
+            foreach ($items as $item) {
+                $detail = new Ticket();
+                $detail->setReferenceOrder($order)
+                ->setArticle($item['article'])
+                ->setQty($item['qty']);
+                $ticketRepository->add($detail, true);
+            }
+            $cartService->cleanCart();
+            $this->addFlash('success', 'Votre commande a bien été enregistrée !');
+            return $this->redirectToRoute('app_profile_orders');
         }
 
         return $this->render('cart/index.html.twig', [

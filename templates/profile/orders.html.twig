@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} Orders{% endblock %}
+
+{% block body %}
+<section id="profile-orders" class="container">
+    <h1>Orders :</h1>
+        {% if app.user.orders | length > 0 %}
+        <table class="table text-center">
+            <thead>
+                <tr>
+                    <th>Référence</th>
+                    <th>Date</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in app.user.orders %}
+                <tr>
+                    <td><a href="{{ path('app_profile_order_show', { 'id' : order.id }) }}">{{ order.id }}</a></td>
+                    <td>{{ order.createdAt|date('d/m/Y') }}</td>
+                    <td>{{ order.total }} €</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <div class="alert alert-dark" role="alert">
+            Vous n'avez jamais passé de commande chez nous.
+        </div>
+        {% endif %}
+</section>
+{% endblock %}

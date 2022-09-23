@@ -57,4 +57,9 @@ class CartService
             }
         return $total;
     }
+
+    public function cleanCart()
+    {
+        $this->requestStack->getSession()->set('cart', []);
+    }
 }

@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} Order Details{% endblock %}
+
+{% block body %}
+<div class="col-md-9">
+    <div class="p-3 py-5">
+        <div class="">
+            <h4 class="text-end">Commande #{{order.id}}</h4>
+            <p>Passée le {{order.createdAt|date('d/m/Y')}}</p>
+            <p>{{order.user.firstname|upper}} - {{order.user.lastname|upper}}</p>
+            <p>{{order.user.mainAddress.street}} <br>{{order.user.mainAddress.zipcode}} -
+                {{order.user.mainAddress.city}}<br>{{order.user.mainAddress.country}}</p>
+
+            <table class="table text-center">
+                <thead>
+                    <tr>
+                        <th>Référence</th>
+                        <th>Couleur</th>
+                        <th>Taille</th>
+                        <th>Quantité</th>
+                        <th>Prix</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in order.details %}
+                    <tr>
+                        <td><a href="{{ path('app_shop_show', { 'slug' : item.article.ref.slug }) }}">{{
+                                item.article.ref.title }}</a></td>
+                        <td>{{ item.article.color.name }}</td>
+                        <td>{{ item.article.size.name }}</td>
+                        <td>{{ item.qty }}</td>
+                        <td>{{ item.article.ref.price.amount }} €</td>
+                        <td>{{ item.article.ref.price.amount * item.qty }} €</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th>Total</th>
+                    <td>{{ order.total }} €</td>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
